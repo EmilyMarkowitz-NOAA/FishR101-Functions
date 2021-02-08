@@ -35,6 +35,7 @@ weather <- "good"
 
 # Test your scripts with for the second - fourth bullet (ifelse(), if_else(), case_when())
 dat<-data.frame(weather = c("excellent", "good", "fair", "poor"))
+
 # Then tell us which do you think is the most sensible approach?
 
 #  - if() / if()}else{} / if()}else if(){} statement (whichever you see fit), 
