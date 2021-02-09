@@ -79,10 +79,10 @@ mean(trials) # NOTE: because we are taking a random sample (sample())
 # you will not get the same answer that I get in the solutions. 
 # Here it is important to be in the ballpark!
 
-# EXTRA Credit
+# 3. EXTRA Credit -------------------------
 
-# Vectorize the below loop into 4 tidyverse lines: 
-
+# Change the the below for loop from the lecture into 4 tidyverse lines with no loop: 
+  
 EBS_haul_table<-read_csv(here::here("data", "ebs_2017-2018.csv"))
 
 EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
