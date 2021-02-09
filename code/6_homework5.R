@@ -59,15 +59,12 @@ dat<-data.frame(weather = c("excellent", "good", "fair", "poor"))
 
 # Q. Which do you think is the most sensible approach?
 
-# I would argue that the dplyr::case_when() is the cleanest solution, 
-# but as you can see, they all work!
-# Whichever one suits your fancy. 
 
 # ***2. For loops--------------------
 
 ## Improve the following code by putting it into a for loop!
 
-# Let's use a for loop to estimate the average the result of a roll of a die. Where...
+# Let's use a for loop to estimate the average the result of a roll of a die. 
 nsides = 6
 ntrials = 1000
 
@@ -82,95 +79,39 @@ mean(trials) # NOTE: because we are taking a random sample (sample())
 # you will not get the same answer that I get in the solutions. 
 # Here it is important to be in the ballpark!
 
+# EXTRA Credit
 
-# ***3. Functions-----------------
+# Vectorize the below loop into 4 tidyverse lines: 
 
-# Though you can use funtions to automate processes like we did in the coursework, 
-# I am going to take a slightly different take here and focus of using functions 
-# for, well, mathimatical functions!
+EBS_haul_table<-read_csv(here::here("data", "ebs_2017-2018.csv"))
 
-## ******3.1 The Pythagorean Theorem ----------
-# NOTE: See .PDF version for helpful Graphic
+EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
+  dplyr::group_by(YEAR, STRATUM, COMMON) %>% # Group by YEAR, STRATUM, COMMON for next command
+  dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE)) # sum WTCPUE across grouped items above
 
-# a^{2} + b^{2} = c^{2}
+unique_yr_strat<-EBS_summary %>% 
+  dplyr::select("YEAR", "STRATUM") %>% 
+  distinct()
 
-# Where: 
-# - $a$ is the length of leg A
-# - $b$ is leg length of leg B
-# - $c$ is the length of leg C, otherwise known as the hypotenuse
+unique_yr_strat
 
-# If $a$ = 5 and $b$ = 3, solve for $c$ and include {roxygen2} skeletons!
+max_5_spp<-NULL
 
+for (i in 1:nrow(unique_yr_strat)){
+  
+  # basically use the same code you had above, but with iterative, not fixed, 
+  # variables for year and stratum 
+  # max_5_spp0 <- NULL
+  max_5_spp0 <- EBS_summary %>%
+    dplyr::filter(YEAR == unique_yr_strat$YEAR[i], 
+                  STRATUM == unique_yr_strat$STRATUM[i]) %>% 
+    dplyr::arrange(-WTCPUE_sum) %>%
+    dplyr::top_n(n = 5)
+  
+  max_5_spp<-bind_rows(max_5_spp, 
+                       max_5_spp0)
+}
 
-## ******3.2 Newton's Universal Law of Gravitation------------
-# NOTE: See .PDF version for helpful Graphic
+max_5_spp
 
-# F = G (m_1 /m_2)*d^2
-
-# Where: 
-# - $F$	=	force
-# - $G$	=	gravitational constant ($6.67430*10^{-11}$)
-# - $m_1$	=	mass of object 1
-# - $m_2$	=	mass of object 2
-# - $r$	=	distance between centers of the masses
-
-# Let the mass of object 1 (m_1) = 5, 
-# mass of object 2 (m_2) = 3, and 
-# distance between the two masses (d) = 2. 
-# Solve for force ($F$) and include {roxygen2} skeletons:
-
-# Hint! The Gravitational Constant Shouldn't change, unless you are testing 
-# this out on other planets. To save time, add the gravitational constant to 
-# where you call your arguments in your function. 
-
-
-## ******3.3 Area Swept (from our surveys!) ------------
-
-# This is the area sampled for each observation when we survey. Often we can 
-# assume this number is low (e.g., 0.001). In our case, we need to add some 
-# conversions to make this useful to the survey outputs. Here I'll write without 
-# variables to make it easier to read:
-
-# Area Swept (km^2) = Distance Fished (hectare) * (Net Width (m) * 0.001(km/m) * 100 (km/hectare)
-
-# But for writing our function, we'll simplify to the core of this equation:
-
-# area = distance * width
-
-### 3.3.1 Write a function for this equation and solve for Area Swept (km^2). -------------
-# Use a0 = Area, 
-# d0 = Distance (.001), 
-# w0 = Width (10). 
-# Solve for Area (a0) and include {roxygen2} skeletons. 
-
-
-### 3.3.2 Now apply this function to some real data! -----------------
-# Here I've combined two datasets, *haul* and *catch* for Eastern Bering Sea data. 
-# Here is *catch* and *haul* joined:
-
-EBS<-read_csv(file = here("data", "haul_catch.csv"))
-EBS <- subset(x = EBS, 
-              subset = (YEAR == 2017), 
-              select = c("YEAR", "SPECIES_CODE", "WEIGHT", "NUMBER_FISH", 
-                         "REGION", "VESSEL", "HAUL", 
-                         "STRATUM", "PERFORMANCE", "START_TIME", 
-                         "DURATION", "DISTANCE_FISHED", "NET_WIDTH", "NET_HEIGHT"))
-
-
-
-## ***3.4 Catch Per Unit Effort (CPUE) --------------
-
-# CPUE is calculated by dividing the catch of each fishing trip by the number of 
-# hours fished during that trip. This gives CPUE in units of kilograms per hour.
-
-# CPUE = \frac{Catch_{trips}(kg)}{time_{trips}(hr)} 
-
-### Write a function for this equation and solve for $CPUE$. 
-# Use catch = catch from the survey (catch = EBS$NUMBER_FISH), 
-# time = time in hours from the survey (EBS$DURATION), 
-# trips = number of trips taken during survey (EBS$HAUL). 
-# Solve for CPUE (CPUE) and include {roxygen2} skeleton. 
-
-# Hint: This question is meant to challenge you. 
-# You'll need to use an for loop to cycle through unique trips. 
 

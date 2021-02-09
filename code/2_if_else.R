@@ -33,7 +33,7 @@ y <- 5
 z <- 5
 v <- 1:6
 
-# ***if(){}else if(){}  statements -------------------------------------------------------
+# ***if(){}else if(){}  statements ----------------------------------------------
 
 # ******if()  statement -------------------------------------------------------
 
@@ -72,7 +72,9 @@ if (x > y) print("x is greater") else print("y is greater")
 if (x > y) x else y
 # This returns the value that this is true for
 
-# ******if(), else if() statement -------------------------------------------------------
+# ******if(), else if() statement ---------------------------------------------
+y
+z
 
 if(y > z) {
   print("y is greater")
@@ -129,6 +131,7 @@ v1 <- 1:6
 ifelse(v1 %% 2 == 0, "even", "odd")
 
 # You can even use this function to choose values from two vectors.
+v1 <- 1:6
 v2 <- c("a","b","c","d","e","f")
 ifelse(c(TRUE,FALSE,TRUE,FALSE,TRUE,FALSE), v1, v2)
 
@@ -162,7 +165,9 @@ dt %>%
 dt %>% 
   mutate(x_cat = case_when(x < -.5 ~ "low",
                            x <  .5 ~ "moderate",
-                           x >= .5 ~ "high"))
+                           x >= .5 ~ "high"#, 
+                           # is.na(x) ~ "nope"
+                           ))
 
 # ***Compare-contrast - How to best write if-else -------------------------------------------------------
 
