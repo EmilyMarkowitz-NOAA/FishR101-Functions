@@ -105,28 +105,6 @@ if(x > y && x > z) {
   print("x is greater")
 }
 
-# *********NOTE - funny things about if()---------------
-
-# In R, any non-zero value is considered TRUE, whereas a zero is considered FALSE. 
-# That’s why all the below if statements are valid.
-
-# Here it's if(value) then TRUE or FALSE  rather than 
-# if something is distinct from this other thing in a T/F way. 
-
-# mathematical expression
-x <- 7
-y <- 5
-if(x + y) {
-  print("True") # Note that this is a character, not a boolean TRUE (or FALSE)
-}
-
-
-# any non-zero value
-if(-3) {
-  print("True")
-}
-
-
 # ***ifelse() statement function -------------------------------------------------------
 
 # In R, conditional statements are not vector operations. 
@@ -186,7 +164,7 @@ dt %>%
                            x <  .5 ~ "moderate",
                            x >= .5 ~ "high"))
 
-# ***Compare-contrast - How to best write these -------------------------------------------------------
+# ***Compare-contrast - How to best write if-else -------------------------------------------------------
 
 # ******Example 1------------------
 x <- -5
@@ -205,7 +183,9 @@ if(x > 0){
 }
 
 # Alternatively...
-ifelse(x > 0, print("Non-negative number"), print("Negative number") )
+ifelse(x > 0, # This also works with vectorized data
+       print("Non-negative number"), 
+       print("Negative number") )
 
 # ******Example 2------------------
 

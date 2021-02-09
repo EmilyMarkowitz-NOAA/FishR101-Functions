@@ -45,17 +45,7 @@ print(paste("The year is", 2015))
 # Simple! We are going to use what we just learned about loops to iterate between years!
 # There are two ways of writing this loop:
 
-# A. 
-#      Here, we use the variables to be the iterative value, such that 
-#      year will be 2010 in the first loop, 2011 the second loop,... 
-#      and 2015 for the last loop. 
-for (yr in c(2010,2011,2012,2013,2014,2015)){ # Where yr = 2010, 2011, etc. iteratively
-  print(paste("The year is", yr))
-}
-
-yr
-
-#B. 
+#A. 
 #      Here, we use the iterative value i to cycle through the items in the yrs vector. 
 #      Such that i will equal 1, 2, 3,... length(yrs) (=6) and we find the ith 
 #      item in the yrs vector by calling yrs[i]. 
@@ -66,6 +56,16 @@ for (i in 1:length(yrs)){ # where i = 1,2,3,... and we call the ith item of the 
 }
 
 i
+
+# B. 
+#      Here, we use the variables to be the iterative value, such that 
+#      year will be 2010 in the first loop, 2011 the second loop,... 
+#      and 2015 for the last loop. 
+for (yr in c(2010,2011,2012,2013,2014,2015)){ # Where yr = 2010, 2011, etc. iteratively
+  print(paste("The year is", yr))
+}
+
+yr
 
 # This was clearly a simple example, but you can see where this approach would 
 # become really important for when something has to be done a bunch of time and 
