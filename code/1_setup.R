@@ -13,11 +13,11 @@ library(here)
 
 # directories --------------------------------------------------------------------
 
-source(here("code", "file_folders.R"))
+source(here("functions", "file_folders.R"))
 
 # download data --------------------------------------------------------------------
 
-EBS_haul_table<-read_csv(here::here("data", "ebs_2017-2018.csv"))
+EBS_haul_table<-read_csv(here::here("functions", "ebs_2017-2018.csv"))
 
 # look at your data -------------------------------------------------------
 
