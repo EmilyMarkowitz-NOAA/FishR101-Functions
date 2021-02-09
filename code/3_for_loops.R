@@ -68,7 +68,7 @@ for (yr in c(2010,2011,2012,2013,2014,2015)){ # Where yr = 2010, 2011, etc. iter
 yr
 
 # This was clearly a simple example, but you can see where this approach would 
-# become really important for when something has to be done a bunch of time and 
+# become really important for when something has to be done a bunch of times and 
 # for more complicated statements
 
 # A note for later, printing i can be a useful tool for troubleshooting code so 
@@ -84,6 +84,8 @@ EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
   dplyr::group_by(YEAR, STRATUM, COMMON) %>% # Group by YEAR, STRATUM, COMMON for next command
   dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE)) # sum WTCPUE across grouped items above
 
+EBS_summary
+
 # ***Task 2 - the long way ---------------------------------
 
 # Year = 2016, Stratum = 10 
@@ -92,11 +94,15 @@ max_5_spp_2016_10 <- EBS_summary %>%
   dplyr::arrange(-WTCPUE_sum) %>%
   dplyr::top_n(n = 5)
 
+max_5_spp_2016_10
+
 # Year = 2016, Stratum = 20 
 max_5_spp_2016_20 <- EBS_summary %>% # Change name
   dplyr::filter(YEAR == 2016, STRATUM == 20) %>% # we change these variables
   dplyr::arrange(-WTCPUE_sum) %>%
   dplyr::top_n(n = 5)
+
+max_5_spp_2016_20
 
 # ...you get the idea... that this will take FOREVER.
 # ...and yes, THERE IS A BETTER WAY!
@@ -111,7 +117,6 @@ unique_yr_strat<-EBS_summary %>%
 unique_yr_strat
 
 max_5_spp<-NULL
-max_5_spp2<-NULL
 
 for (i in 1:nrow(unique_yr_strat)){
   
