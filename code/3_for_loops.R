@@ -22,8 +22,6 @@ library(here)
 # 
 # str(EBS_haul_table)
 
-# -------------------------------------------------------
-
 # What is a for loop? ---------------------------------
 
 # = “looping”, “cycling”, “iterating” or just replicating instructions. 
@@ -73,6 +71,9 @@ i
 # become really important for when something has to be done a bunch of time and 
 # for more complicated statements
 
+# A note for later, printing i can be a useful tool for troubleshooting code so 
+# you can see where a loop breaks. 
+
 # Task 2 ---------------------------------
 
 # Lets say that we want to look at this data by year and by stratum to find out 
@@ -103,22 +104,28 @@ max_5_spp_2016_20 <- EBS_summary %>% # Change name
 ###### ***Task 2 - with for loops ---------------------------------
 
 # Here are all of the instances we need checked
-unique_yr_strat<-unique(EBS_summary[,c("YEAR", "STRATUM")])
+unique_yr_strat<-EBS_summary %>% 
+  dplyr::select("YEAR", "STRATUM") %>% 
+  distinct()
 
-max_5_spp<-data.frame()
+unique_yr_strat
+
+max_5_spp<-NULL
+max_5_spp2<-NULL
 
 for (i in 1:nrow(unique_yr_strat)){
   
   # basically use the same code you had above, but with iterative, not fixed, 
   # variables for year and stratum 
+  # max_5_spp0 <- NULL
   max_5_spp0 <- EBS_summary %>%
     dplyr::filter(YEAR == unique_yr_strat$YEAR[i], 
                   STRATUM == unique_yr_strat$STRATUM[i]) %>% 
     dplyr::arrange(-WTCPUE_sum) %>%
     dplyr::top_n(n = 5)
   
-  max_5_spp<-rbind.data.frame(max_5_spp, 
-                        max_5_spp0[1:5,])
+  max_5_spp<-bind_rows(max_5_spp, 
+                       max_5_spp0)
 }
 
 max_5_spp # And that was so easy, so much shorter to write, and faster!!
@@ -130,8 +137,8 @@ max_5_spp # And that was so easy, so much shorter to write, and faster!!
 i
 # but by looking in our environment under values, we see that i = 36L
 #  to learn more about i, we can employ class() and mode()
-class(i)
-mode(i)
+class(i) # an integer is a value with no decimals
+mode(i) # integers are numeric
 # i is a numeric integer (no decimal places/only whole numbers)
 
 # and what is max_5_spp0? 

@@ -33,8 +33,7 @@ var <- 10:20
 for (i in 1:length(var)){ # For the ith item in var, 
   print(var[i])           # Print to the console that the ith item in var,
 }                         # Done
-# this will print out each value of i, iteratively
-
+# this will print each value of var iteratively (i)
 
 # ***if-else statement --------------------------------------------------------
 

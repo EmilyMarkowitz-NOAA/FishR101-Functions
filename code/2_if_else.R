@@ -47,22 +47,6 @@ if(x < y) {
 }
 # This is a false statement, so it returns nothing! Nothing in the body was run.
 
-# *********NOTE - funny things about if()---------------
-
-# In R, any non-zero value is considered TRUE, whereas a zero is considered FALSE. That’s why all the below if statements are valid.
-
-# mathematical expression
-x <- 7
-y <- 5
-if(x + y) {
-  print("True")
-}
-
-
-# any non-zero value
-if(-3) {
-  print("True")
-}
 
 # ******if() else statement -------------------------------------------------------
 
@@ -121,12 +105,36 @@ if(x > y && x > z) {
   print("x is greater")
 }
 
+# *********NOTE - funny things about if()---------------
+
+# In R, any non-zero value is considered TRUE, whereas a zero is considered FALSE. 
+# That’s why all the below if statements are valid.
+
+# Here it's if(value) then TRUE or FALSE  rather than 
+# if something is distinct from this other thing in a T/F way. 
+
+# mathematical expression
+x <- 7
+y <- 5
+if(x + y) {
+  print("True") # Note that this is a character, not a boolean TRUE (or FALSE)
+}
+
+
+# any non-zero value
+if(-3) {
+  print("True")
+}
+
+
 # ***ifelse() statement function -------------------------------------------------------
 
 # In R, conditional statements are not vector operations. 
 # They deal only with a single value.
 # If you pass in, for example, a vector, the if statement will only check the 
 # very first element and issue a warning.
+
+v # recall that v is a vector of numbers
 
 if(v %% 2) { # %% is modulo = Give the remainder of the first vector with the second
   print("odd")
