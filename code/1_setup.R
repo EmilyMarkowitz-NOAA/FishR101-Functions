@@ -13,7 +13,7 @@ library(here)
 
 # directories --------------------------------------------------------------------
 
-source(here("functions", "file_folders.R"))
+source(here("code", "file_folders.R"))
 
 # download data --------------------------------------------------------------------
 
