@@ -38,7 +38,7 @@ library(here)
 print(paste("The year is", 2010))
 print(paste("The year is", 2011))
 print(paste("The year is", 2012))
-print(paste("Te year is", 2013))
+print(paste("Te year is", 2013)) # Typo?! NOOOO
 print(paste("The year is", 2014))
 print(paste("The year is", 2015))
 
