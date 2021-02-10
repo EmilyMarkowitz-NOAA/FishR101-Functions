@@ -228,7 +228,8 @@ dplyr::case_when(# This also works with vectorized data
   x > 0 ~ "Positive number", 
   TRUE ~ "Negative number or 0")
 
-# ******Example 2 (MORE COMPLICATED)------------------
+
+#******Example 2 - (MEDIUM)----------------
 
 # Let's say that you work at a company and you charge a different markup 
 # depending on who is asking for the service. 
@@ -255,7 +256,7 @@ tot_price
 
 # Luckily, R allows you to write all that code a bit more clearly. 
 # You can chain the if…else statements as follows:
-  
+
 if(client=='private'){
   tot_price <- net_price * 1.12
 } else if(client=='public'){
@@ -272,7 +273,7 @@ tot_price
 # doesn’t have any of the two other values, it has to be ‘abroad’.
 
 net_price * ifelse(client=='private', 1.12, 
-              ifelse(client == 'public', 1.06, 1))
+                   ifelse(client == 'public', 1.06, 1))
 
 # We can also use the dplyr functions!
 # if_else()
@@ -289,4 +290,156 @@ net_price *
                    TRUE ~ 1) 
 
 
+# ******Example 3 (HARD)------------------
 
+# Below is the EBS trawl data from 2016 and 2017. 
+
+EBS_haul_table<-read_csv(here::here("data", "ebs_2017-2018.csv"))
+
+# Lets say that for a species in a year we want to assess: 
+# 1. for stratum under 50 m (10 and 20), 
+#    we want to calculate the **sum of WTCPUE**
+#    caught at each station, 
+# 2. for stratum from 50-100 m (82, 43, 41, 42, 32, and 31),
+#    we want to calculate the **mean of NUMCPUE** 
+#    at each station or,
+# 3. for stratum from 100-200 m (90, 62, 61, and 50), 
+#    we want to calculate the **sum of WTCPUE AND mean of NUMCPUE** 
+#    at each station.
+# 4. For any data out of this stratum, do nothing. They're not in the EBS!
+
+# Why? Why not. 
+
+# and let's say that we are going to test this ifelse for 
+yr <- 2016
+common <- "walleye pollock"
+# notice I used the variables here instead of writing it out. 
+# Could be useful in the future if you need to change anything and 
+# don't want to change it at each step...
+
+# *********Long way--------------------------
+
+# First, let's write this out the long way for each example instance:
+
+# for condition 1 (stratums under 50 m (10 and 20)), 
+# here is how we would find the **sum of WTCPUE**
+strat <- 10 # or 20
+
+EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
+  dplyr::filter(COMMON == common, 
+                YEAR == yr, 
+                STRATUM == strat) %>%
+  dplyr::group_by(YEAR, STRATUM, STATION, COMMON) %>% # Group by YEAR, STRATUM, STATION, COMMON for next command
+  dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE)) # sum WTCPUE across grouped items above
+
+EBS_summary
+
+# for condition 2 (stratums from 50-100 m (82, 43, 41, 42, 32, and 31)), 
+# here is how we would find the **median of WTCPUE AND sum of NUMCPUE**  
+strat <- 82 # or 43, 41, 42, 32, and 31
+
+EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
+  dplyr::filter(COMMON == common, 
+                YEAR == yr, 
+                STRATUM == strat) %>%
+  dplyr::group_by(YEAR, STRATUM, STATION, COMMON) %>% # Group by YEAR, STRATUM, STATION, COMMON for next command
+  dplyr::summarise(NUMCPUE_mean = mean(NUMCPUE, na.rm = TRUE)) # mean NUMCPUE across grouped items above
+
+EBS_summary
+
+# for condition 3 (stratums from 100-200 m (90, 62, 61, and 50)), 
+# here is how we would find the **mean of NUMCPUE** 
+strat <- 90 # or 62, 61, and 50
+
+
+EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
+  dplyr::filter(COMMON == common, 
+                YEAR == yr, 
+                STRATUM == strat) %>%
+  dplyr::group_by(YEAR, STRATUM, STATION, COMMON) %>% # Group by YEAR, STRATUM, STATION, COMMON for next command
+  dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE),  # sum WTCPUE across grouped items above
+                   NUMCPUE_mean = mean(NUMCPUE, na.rm = TRUE)) # mean NUMCPUE across grouped items above
+
+
+EBS_summary
+
+
+# *********If-Else way--------------------------
+
+
+# 1. for stratums under 50 m (10 and 20), 
+#    we want to calculate the **sum of WTCPUE**
+#    caught at each station, 
+# 2. for stratums from 50-100 m (82, 43, 41, 42, 32, and 31),
+#    we want to calculate the **mean of NUMCPUE** 
+#    at each station or,
+# 3. for stratum from 100-200 m (90, 62, 61, and 50), 
+#    we want to calculate the **sum of WTCPUE AND mean of NUMCPUE** 
+#    at each station.
+
+# We can start off with the top of the piping because that is the same for each condition...
+EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
+  dplyr::filter(COMMON == common, 
+                YEAR == yr, 
+                STRATUM == strat) %>%
+  dplyr::group_by(YEAR, STRATUM, STATION, COMMON) # Group by YEAR, STRATUM, STATION, COMMON for next command
+  # Notice I removed the pipe at the end ^
+
+# Let condition 1 be true
+strat <- 10 # or 20
+# stratum under 50 m
+
+if (strat %in% c(10, 20)){ # stratum under 50 m
+  EBS <- EBS_summary %>% 
+    dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE)) # sum WTCPUE across grouped items above
+} else if (strat %in% c(82, 43, 41, 42, 32, 31)) { # stratum between 50-100 m
+  EBS <- EBS_summary %>% 
+    dplyr::summarise(NUMCPUE_mean = mean(NUMCPUE, na.rm = TRUE)) # mean NUMCPUE across grouped items above
+} else if (strat %in% c(90, 62, 61, 50)) { # stratum between 100-200 m
+  EBS <- EBS_summary %>% 
+    dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE),  # sum WTCPUE across grouped items above
+                     NUMCPUE_mean = mean(NUMCPUE, na.rm = TRUE)) # mean NUMCPUE across grouped items above
+}
+
+EBS
+
+# Let condition 2 be true
+strat <- 82 # or 43, 41, 42, 32, and 31
+# stratum between 50-100 m
+
+if (strat %in% c(10, 20)){ # stratum under 50 m
+  EBS <- EBS_summary %>% 
+    dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE)) # sum WTCPUE across grouped items above
+} else if (strat %in% c(82, 43, 41, 42, 32, 31)) { # stratum between 50-100 m
+  EBS <- EBS_summary %>% 
+    dplyr::summarise(NUMCPUE_mean = mean(NUMCPUE, na.rm = TRUE)) # mean NUMCPUE across grouped items above
+} else if (strat %in% c(90, 62, 61, 50)) { # stratum between 100-200 m
+  EBS <- EBS_summary %>% 
+    dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE),  # sum WTCPUE across grouped items above
+                     NUMCPUE_mean = mean(NUMCPUE, na.rm = TRUE)) # mean NUMCPUE across grouped items above
+}
+
+EBS
+
+# Let condition 3 be true
+strat <- 90 # or 62, 61, and 50
+# stratum under 100-200 m
+
+if (strat %in% c(10, 20)){ # stratum under 50 m
+  EBS <- EBS_summary %>% 
+    dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE)) # sum WTCPUE across grouped items above
+} else if (strat %in% c(82, 43, 41, 42, 32, 31)) { # stratum between 50-100 m
+  EBS <- EBS_summary %>% 
+    dplyr::summarise(NUMCPUE_mean = mean(NUMCPUE, na.rm = TRUE)) # mean NUMCPUE across grouped items above
+} else if (strat %in% c(90, 62, 61, 50)) { # stratum between 100-200 m
+  EBS <- EBS_summary %>% 
+    dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE),  # sum WTCPUE across grouped items above
+                     NUMCPUE_mean = mean(NUMCPUE, na.rm = TRUE)) # mean NUMCPUE across grouped items above
+}
+
+EBS
+
+# That was a bit long winded and verbose, but good! Everything works as planned. 
+# Now, let's make this code even better!
+
+# Think about it: How woud you do this with ifelse(), if_else(), case_when()?

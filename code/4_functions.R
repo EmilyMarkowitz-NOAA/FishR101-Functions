@@ -40,13 +40,26 @@ library(here)
 
 # let's see this in a simple example
 
-function_name<- function(argument){
-  
-  # function body
-  out<-argument # statement
+function_name <-      # Name of function
+  function(argument)  # Define what input arguments are needed
+    {                 # Begining of function body
+  out<-argument       # Statement
+  return(out)         # return outputs from the function body
+}                     # DONE, end of funciton body
 
-  return(out)
+# NOTE the line breaks here mostly don't matter
+# This is yields the same as above: 
+
+# probably how you will most often see them written out
+function_name <-function(argument) {
+    out<-argument
+    return(out)
 }
+
+# As does this, but harder to read, but works
+function_name <-function(argument) { out<-argument; return(out)} 
+# note that I used a line break ; to seperate the different parts of this statement
+
 
 # This will work the same as writing the below because it will assume that the 
 # last unassigned variable is meant to be returned, but this is a BAD practice. 
@@ -107,7 +120,7 @@ environment(stringr::regex) # shows what package regex is coming from (text afte
 # Lets say that we want to look at this data by year and by stratum to find out 
 # what the top 5 species are in each 
 
-# ****** loop from Task 2 2_for_loops.R ----------------------------
+# ****** loop from Example 2 in 2_for_loops.R ----------------------------
 
 # data manipulation
 
@@ -115,7 +128,7 @@ EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
   dplyr::group_by(YEAR, STRATUM, COMMON) %>% # Group by YEAR, STRATUM, COMMON for next command
   dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE)) # sum WTCPUE across grouped items above
 
-# loop from Task 2 2_for_loops.R 
+# loop from example 2 2_for_loops.R 
 
 unique_yr_strat<-unique(EBS_summary[,c("YEAR", "STRATUM")])
 max_5_spp<-data.frame()
@@ -134,7 +147,7 @@ for (i in 1:nrow(unique_yr_strat)){
 
 max_5_spp 
 
-# ****** function of loop from Task 2 2_for_loops.R ----------------------------
+# ****** function of loop from Example 2 2_for_loops.R ----------------------------
 
 # We could simply create a funciton from this code that will allow us to input 
 # the data, year, and station we are interested in seeing the top 5 species from

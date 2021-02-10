@@ -11,9 +11,6 @@ library(here)
 
 # tasks -------------------------------------------------------------------
 
-# NOTE: For this homework, also refer to the PDF version. 
-# There are helpful graphics included in the PDF version!
-
 #*** 1. If-else statements----------------
 
 
@@ -62,7 +59,7 @@ dat<-data.frame(weather = c("excellent", "good", "fair", "poor"))
 
 # ***2. For loops--------------------
 
-## Improve the following code by putting it into a for loop!
+## ******2.2 Improve the following code by putting it into a for loop!---------
 
 # Let's use a for loop to estimate the average the result of a roll of a die. 
 nsides = 6
@@ -79,10 +76,10 @@ mean(trials) # NOTE: because we are taking a random sample (sample())
 # you will not get the same answer that I get in the solutions. 
 # Here it is important to be in the ballpark!
 
-# 3. EXTRA Credit -------------------------
+# ***3. EXTRA Credit -------------------------
 
-# Change the the below for loop from the lecture into 4 tidyverse lines with no loop: 
-  
+# Recall this example from the coursework:
+
 EBS_haul_table<-read_csv(here::here("data", "ebs_2017-2018.csv"))
 
 EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
@@ -97,11 +94,9 @@ unique_yr_strat
 
 max_5_spp<-NULL
 
-for (i in 1:nrow(unique_yr_strat)){
+# Change the the below for loop from the lecture into 4 tidyverse lines with no loop: 
   
-  # basically use the same code you had above, but with iterative, not fixed, 
-  # variables for year and stratum 
-  # max_5_spp0 <- NULL
+for (i in 1:nrow(unique_yr_strat)){
   max_5_spp0 <- EBS_summary %>%
     dplyr::filter(YEAR == unique_yr_strat$YEAR[i], 
                   STRATUM == unique_yr_strat$STRATUM[i]) %>% 
@@ -113,5 +108,3 @@ for (i in 1:nrow(unique_yr_strat)){
 }
 
 max_5_spp
-
-

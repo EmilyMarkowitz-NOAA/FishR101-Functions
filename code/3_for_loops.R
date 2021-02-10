@@ -31,7 +31,7 @@ library(here)
 
 # for loops are best shown with examples:
 
-# Task 1 ---------------------------------
+# Example 1 (EASY)---------------------------------
 
 # Create a simple loop that will do this same task in THREE lines or less
 
@@ -51,21 +51,25 @@ print(paste("The year is", 2015))
 #      item in the yrs vector by calling yrs[i]. 
 yrs<-c(2010,2011,2012,2013,2014,2015) # create a variable
 
-for (i in 1:length(yrs)){ # where i = 1,2,3,... and we call the ith item of the vector yrs
-  print(paste("The year is", yrs[i]))
-}
+for (i in 1:length(yrs)){             # Define iterations - where i = 1,2,3,... and we call the ith item of the vector yrs
+  print(paste("The year is", yrs[i])) # The body of the for loop
+}                                     # DONE
 
-i
+i # this is a level
+mode(i)
+class(i)
 
 # B. 
 #      Here, we use the variables to be the iterative value, such that 
 #      year will be 2010 in the first loop, 2011 the second loop,... 
 #      and 2015 for the last loop. 
-for (yr in c(2010,2011,2012,2013,2014,2015)){ # Where yr = 2010, 2011, etc. iteratively
-  print(paste("The year is", yr))
-}
+for (yr in c(2010,2011,2012,2013,2014,2015)){ # Define iterations - Where yr = 2010, 2011, etc. iteratively
+  print(paste("The year is", yr))             # The body of the for loop
+}                                             # DONE
 
-yr
+yr # not a level, the actual number!
+mode(yr)
+class(yr)
 
 # This was clearly a simple example, but you can see where this approach would 
 # become really important for when something has to be done a bunch of times and 
@@ -74,7 +78,7 @@ yr
 # A note for later, printing i can be a useful tool for troubleshooting code so 
 # you can see where a loop breaks. 
 
-# Task 2 ---------------------------------
+# Example 2 (HARD) ---------------------------------
 
 # Lets say that we want to look at this data by year and by stratum to find out 
 # what the top 5 species are in each 
@@ -107,7 +111,8 @@ max_5_spp_2016_20
 # ...you get the idea... that this will take FOREVER.
 # ...and yes, THERE IS A BETTER WAY!
 
-###### ***Task 2 - with for loops ---------------------------------
+# ******Example 2 - with for loops (MORE COMPLICATED)------------------
+###### ***Task 2  ---------------------------------
 
 # Here are all of the instances we need checked
 unique_yr_strat<-EBS_summary %>% 
@@ -151,3 +156,6 @@ max_5_spp0
 # Just the last 5 species that were caught from the last year and stratum assessed
 # We don't actually need max_5_spp0 for anything after this point, but it is saved in our environment
 # (remember this when we talk about functions in a bit!)
+
+#### Think, how can this same example be done without a for loop (using tidyverse!)?
+
